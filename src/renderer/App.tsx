@@ -6,10 +6,10 @@ import './App.css';
 export default function App() {
   return (
     <Router>
-      <Route>
+      <Routes>
         <Route path="/photo" element={<PhotoCrop />} />
-      <Route path="/" element={<Hello />} >
-      </Route>
+        <Route path="/" element={<Hello />} />
+      </Routes>
     </Router>
   );
 }
