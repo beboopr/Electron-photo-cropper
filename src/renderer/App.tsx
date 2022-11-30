@@ -1,18 +1,15 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import Hello from './components/Hello.js'
+import Hello from './components/Hello';
+import PhotoCrop from './components/PhotoCrop';
 import './App.css';
-
-const Hello = () => {
-  return (
-  );
-};
 
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
+      <Route>
+        <Route path="/photo" element={<PhotoCrop />} />
+      <Route path="/" element={<Hello />} >
+      </Route>
     </Router>
   );
 }

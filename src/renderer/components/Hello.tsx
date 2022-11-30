@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Hello() {
   return (
     <div>
@@ -5,7 +7,7 @@ export default function Hello() {
         <h1>My photo Cropper</h1>
       </div>
       <div className="Hello">
-        <a
+        <Link to="/photo">
           href="https://electron-react-boilerplate.js.org/"
           target="_blank"
           rel="noreferrer"
@@ -16,7 +18,7 @@ export default function Hello() {
             </span>
             Crop Photo
           </button>
-        </a>
+        </Link>
         <a
           href="https://github.com/sponsors/electron-react-boilerplate"
           target="_blank"
