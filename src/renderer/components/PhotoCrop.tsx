@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import Cropper from 'react-easy-crop';
-import { readFile } from '../../main/helpers';
+import { useState, useCallback } from 'react';
+import Cropper, { Area } from 'react-easy-crop';
+import { readFile, cropImageData } from '../../main/helpers';
 
 
 export default function PhotoCrop() {
@@ -9,15 +9,25 @@ export default function PhotoCrop() {
   const [filenamme, setFilename] = useState(null); // file address
   const [crop, setCrop] = useState({x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // first save the croppped image
-    // save cropped image(filename, imageSrc, croppedpixles)
-    // then reset for next photo
-    setImageSrc(null);
-    setZoom(1);
-    setCrop({x: 0, y:0 });
+    // need the base64data
+    if(croppedAreaPixels && imageSrc) { 
+      const base64data = await cropImageData(imageSrc, croppedAreaPixels);
+      const newFilename = filenamme + '-cropped.png';
+      window.electron.saveCroppedImage([newFilename, base64data]);
+      // save cropped image(filename, imageSrc, croppedpixles)
+      // then reset for next photo
+      setImageSrc(null);
+      setZoom(1);
+      setCrop({x: 0, y:0 });
+     }
   }
+const onCropComplete = useCallback((croppedAera: Area, currentCroppedPixels: Area) => {
+  setCroppedAreaPixels(currentCroppedPixels);
+}, []);
 
   const handleFileChange = async (e: any) => {
     if (e.target.files && e.target.files.length) {
@@ -45,8 +55,13 @@ export default function PhotoCrop() {
       zoom={zoom}
       onCropChange={setCrop}
       onZoomChange={setZoom}
+      onCropComplete={onCropComplete}
       />
       <button onClick={handleSave} className="save-btn">Save</button>
     </>
   );
 }
+function setCroppedAreaPixels(currentCroppedPixels: Area) {
+  throw new Error('Function not implemented.');
+}
+
